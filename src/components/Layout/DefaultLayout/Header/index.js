@@ -1,6 +1,6 @@
 import classes from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faCircleXmark, faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faCircleXmark, faMagnifyingGlass, faSignIn, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
@@ -65,7 +65,14 @@ function Header() {
                             <FontAwesomeIcon icon={faCartShopping} className={classes['cart']} />
                         </li>
                     </ul>
-                    <Button primary medium to='/login' onClick={() => alert('Hiện khung đăng nhập')}>Log in</Button>
+                    <Button
+                        primary
+                        rightIcon={<FontAwesomeIcon icon={faSignIn} />}
+                        medium
+                        to='/login'
+                        onClick={() => alert('Hiện khung đăng nhập')}>
+                        Log in
+                    </Button>
                 </div>
             </div>
         </div>

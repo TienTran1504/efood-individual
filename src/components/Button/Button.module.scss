@@ -1,6 +1,7 @@
 .wrapper {
-    display: flex;
+    display: inline-flex;
     justify-content: center;
+    align-items: center;
     font-size: 1.6rem;
     font-weight: 700;
     min-width: 100px;
@@ -8,6 +9,15 @@
     border-radius: 4px;
     background-color: #fff;
     cursor: pointer;
+
+    + .wrapper {
+        margin: 0 16px;
+    }
+    &.disabled {
+        pointer-events: none;
+        opacity: 0.5;
+        user-select: none;
+    }
 }
 //Type of button
 .primary {
@@ -17,8 +27,16 @@
         background: linear-gradient(0deg, rgba(0, 0, 0, 0.06), rgba(0, 0, 0, 0.06)), var(--primary);
     }
 }
+
 //Size of button
 .small {
     min-width: 88px;
     padding: 4px 8px;
+}
+
+.icon {
+    margin-top: 2px;
+}
+.title + .icon {
+    margin-left: 6px;
 }
