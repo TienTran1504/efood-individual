@@ -12,6 +12,8 @@ function Button({
     primary = false,
     disabled = false,
     rightIcon = false,
+    leftIcon = false,
+    className,
     children,
     ...passProps
 }) {
@@ -37,6 +39,7 @@ function Button({
         Comp = 'a'
     }
     const classes = cx('wrapper', {
+        [className]: className,
         primary,
         small,
         medium,
@@ -46,6 +49,7 @@ function Button({
 
     return (
         <Comp className={classes} {...props}>
+            {leftIcon && <span className={cx('icon')}>{leftIcon}</span>}
             <span className={cx('title')}>{children}</span>
             {/* Nếu có left icon thì thêm vào thẻ span */}
             {rightIcon && <span className={cx('icon')}>{rightIcon}</span>}
