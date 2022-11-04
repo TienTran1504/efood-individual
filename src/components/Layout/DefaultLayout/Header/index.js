@@ -1,10 +1,12 @@
 import classes from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCircleXmark, faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faCircleXmark, faMagnifyingGlass, faSpinner } from '@fortawesome/free-solid-svg-icons';
 import Tippy from '@tippyjs/react/headless';
 import { useEffect, useState } from 'react';
 import { Wrapper as PopperWrapper } from '~/components/Popper';
+import { Link } from 'react-router-dom'
 import FoodItem from '~/components/FoodItem';
+import Button from '~/components/Button';
 
 function Header() {
     const [searchResult, setSearchResult] = useState([]);
@@ -29,9 +31,7 @@ function Header() {
                     render={attrs => (
                         <div className={classes['search-result']} tabIndex="-1" {...attrs}>
                             <PopperWrapper>
-                                <h4 className={classes['search-title']}>
-                                    FOOD
-                                </h4>
+                                <h4 className={classes['search-title']}>FOOD</h4>
                                 <FoodItem />
                                 <FoodItem />
                                 <FoodItem />
@@ -57,11 +57,15 @@ function Header() {
 
                 <div className={classes.actions}>
                     <ul className={classes['menu-list']}>
-                        <li className={classes['menu-item']}><a href="/" className={classes.active}>Home</a></li>
-                        <li className={classes['menu-item']}><a href="/menu">Menu</a></li>
-                        <li className={classes['menu-item']}><a href="/service">Service</a></li>
-                        <li className={classes['menu-item']}><a href="/contact">Contact</a></li>
+                        <li className={classes['menu-item']}><Link to="/" className={classes.active}>Home</Link></li>
+                        <li className={classes['menu-item']}><Link to="/menu">Menu</Link></li>
+                        <li className={classes['menu-item']}><Link to="/service">Service</Link></li>
+                        <li className={classes['menu-item']}><Link to="/contact">Contact</Link></li>
+                        <li className={classes['menu-item']}>
+                            <FontAwesomeIcon icon={faCartShopping} className={classes['cart']} />
+                        </li>
                     </ul>
+                    <Button primary medium to='/login' onClick={() => alert('Hiện khung đăng nhập')}>Log in</Button>
                 </div>
             </div>
         </div>
