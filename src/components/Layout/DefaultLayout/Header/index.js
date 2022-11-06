@@ -7,6 +7,8 @@ import Button from '~/components/Button';
 import Menu from '~/components/Popper/Menu';
 import Image from '~/components/Image';
 import Search from './Search';
+import Tippy from '@tippyjs/react/headless';
+import { Wrapper as PopperWrapper } from '~/components/Popper';
 
 const USER_ITEMS = [
     {
@@ -34,6 +36,8 @@ const USER_ITEMS = [
         icon: <FontAwesomeIcon icon={faSignOut} />,
         title: 'Sign out',
         separate: true,
+        to: '/',
+        logOut: true,
     },
     {
         icon: <FontAwesomeIcon icon={faCoins} />,
@@ -46,6 +50,9 @@ const USER_ITEMS = [
 function Header() {
     const [currentUser, setCurrentUser] = useState(false);
 
+    const handleLogOut = () => {
+        setCurrentUser(!currentUser);
+    }
     return (
         <div className={classes.wrapper}>
 
@@ -67,9 +74,11 @@ function Header() {
                     </ul>
 
 
+
                     {currentUser ? (
                         <Menu
                             items={USER_ITEMS}
+                            handleLogOut
                         >
                             {/* <button className={classes['more-btn']}>
                                 <FontAwesomeIcon icon={faBars} />
@@ -88,8 +97,8 @@ function Header() {
                             primary
                             rightIcon={<FontAwesomeIcon icon={faSignIn} />}
                             medium
-                            to='/login'
-                            onClick={() => setCurrentUser(true)}>
+                            // to='/login'
+                            onClick={handleLogOut}>
                             Sign in
                         </Button>
                     )}
