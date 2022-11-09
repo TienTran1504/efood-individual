@@ -1,4 +1,4 @@
-import Button from '~/components/Button'
+import Button from '~/components/Layout/DefaultLayout/Header/Button'
 import styles from './Menu.module.scss'
 import classNames from 'classnames/bind';
 const cx = classNames.bind(styles);
