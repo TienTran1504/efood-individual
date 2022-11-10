@@ -6,7 +6,6 @@ import { useState } from 'react';
 import Button from '~/components/Layout/DefaultLayout/Header/Button';
 import Menu from '~/components/Layout/DefaultLayout/Header/Popper/Menu';
 import Image from '~/components/Image';
-import images from '~/assets/images'
 import Search from './Search';
 const USER_ITEMS = [
     {
@@ -75,7 +74,7 @@ function Header() {
                     <ul className={classes['menu-list']}>
                         <li className={classes['menu-item']}><Link to="/" className={`${path.pathname === ('/') ? classes.active : ''}`}>Home</Link></li>
                         <li className={classes['menu-item']}><Link to="/menu" className={`${path.pathname.includes('/menu') ? classes.active : ''}`}>Menu</Link></li>
-                        <li className={classes['menu-item']}><Link to="/service" className={`${path.pathname.includes('/service') ? classes.active : ''}`}>Service</Link></li>
+                        <li className={classes['menu-item']}><Link to="/users" className={`${path.pathname.includes('/users') ? classes.active : ''}`}>Users</Link></li>
                         <li className={classes['menu-item']}><Link to="/contact" className={`${path.pathname.includes('/contact') ? classes.active : ''}`}>Contact</Link></li>
                     </ul>
 

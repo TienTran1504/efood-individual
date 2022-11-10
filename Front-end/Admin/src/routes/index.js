@@ -1,17 +1,17 @@
-import Home from '~/pages/Home';
+import Dashboard from '~/pages/Dashboard';
 import Menu from '~/pages/Menu';
-import Service from '~/pages/Service';
 import Upload from '~/pages/Upload';
 import Login from '~/pages/Login';
-
+import Users from '~/pages/\bUsers';
 
 
 const publicRoutes = [
-    { path: '/', component: Home },
+    { path: '/', component: Dashboard },
+    { path: '/users', component: Users },
     { path: '/menu', component: Menu },
-    { path: '/service', component: Service },
     { path: '/login', component: Login },
     { path: '/upload', component: Upload }, // admin
+
 ]
 
 const privateRoutes = [
