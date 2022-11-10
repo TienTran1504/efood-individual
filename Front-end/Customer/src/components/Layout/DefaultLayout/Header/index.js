@@ -1,12 +1,11 @@
 import classes from './Header.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCartShopping, faCircleQuestion, faCloudArrowUp, faCoins, faSignIn, faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
+import { faCartShopping, faCircleQuestion, faCoins, faSignIn, faSignOut, faUser } from '@fortawesome/free-solid-svg-icons';
 import { Link, useLocation } from 'react-router-dom'
 import { useState } from 'react';
 import Button from '~/components/Layout/DefaultLayout/Header/Button';
 import Menu from '~/components/Layout/DefaultLayout/Header/Popper/Menu';
 import Image from '~/components/Image';
-import images from '~/assets/images'
 import Search from './Search';
 const USER_ITEMS = [
     {
@@ -18,12 +17,6 @@ const USER_ITEMS = [
         icon: <FontAwesomeIcon icon={faCircleQuestion} />,
         title: 'Help',
         to: '/service',
-    },
-
-    {
-        icon: <FontAwesomeIcon icon={faCloudArrowUp} />,
-        title: 'Upload',
-        to: '/upload',
     },
     {
         icon: <FontAwesomeIcon icon={faCartShopping} />,
@@ -64,7 +57,6 @@ function Header() {
             <div className={classes.inner}>
                 <Link to="/" className={classes.label}>
                     <div className={classes.active}>E</div>FOOD
-                    {/* <img src={images.logoImage} alt="logo" className={classes['logo']} /> */}
                 </Link>
 
                 <span>
