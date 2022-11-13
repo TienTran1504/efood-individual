@@ -2,7 +2,7 @@ import Dashboard from '~/pages/Dashboard';
 import Menu from '~/pages/Menu';
 import Upload from '~/pages/Upload';
 import Login from '~/pages/Login';
-import Users from '~/pages/\bUsers';
+import Users from '~/pages/Users';
 
 
 const publicRoutes = [

@@ -72,10 +72,9 @@ function Header() {
 
                 <div className={classes.actions}>
                     <ul className={classes['menu-list']}>
-                        <li className={classes['menu-item']}><Link to="/" className={`${path.pathname === ('/') ? classes.active : ''}`}>Home</Link></li>
-                        <li className={classes['menu-item']}><Link to="/menu" className={`${path.pathname.includes('/menu') ? classes.active : ''}`}>Menu</Link></li>
+                        <li className={classes['menu-item']}><Link to="/" className={`${path.pathname === ('/') ? classes.active : ''}`}>Dashboard</Link></li>
                         <li className={classes['menu-item']}><Link to="/users" className={`${path.pathname.includes('/users') ? classes.active : ''}`}>Users</Link></li>
-                        <li className={classes['menu-item']}><Link to="/contact" className={`${path.pathname.includes('/contact') ? classes.active : ''}`}>Contact</Link></li>
+                        <li className={classes['menu-item']}><Link to="/upload" className={`${path.pathname.includes('/upload') ? classes.active : ''}`}>Upload</Link></li>
                     </ul>
 
 

@@ -1,4 +1,4 @@
-import classes from './Upload.module.scss'
+import classes from './Users.module.scss'
 import images from '~/assets/images'
 import { faUser, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -6,8 +6,6 @@ import React, { useState, Fragment } from "react";
 import data from './mock-data.json'
 import ReadOnlyRow from "./components/ReadOnlyRow";
 import EditableRow from "./components/EditableRow";
-import Button from '~/components/Layout/DefaultLayout/Header/Button';
-import Modal from './components/Modal';
 
 
 function Users() {
@@ -118,10 +116,7 @@ function Users() {
     };
     const [modalOpen, setModalOpen] = useState(false);
     return (
-        // < div className={`${modalOpen ? classes['wrapper-opacity'] : classes.wrapper}`}>
         <div className={classes.wrapper}>
-
-            {modalOpen && <Modal setOpenModal={setModalOpen} handleAddFormChange={handleAddFormChange} handleAddFormSubmit={handleAddFormSubmit} />}
 
             <div className={classes.title}>
                 <p className={classes['title-name']}>USERS MANAGEMENT</p>
