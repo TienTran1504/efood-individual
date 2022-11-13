@@ -114,6 +114,7 @@ function Upload() {
         setFoods(newFoods);
     };
     const [modalOpen, setModalOpen] = useState(false);
+    const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
     return (
         // < div className={`${modalOpen ? classes['wrapper-opacity'] : classes.wrapper}`}>
         <div className={classes.wrapper}>
