@@ -114,13 +114,15 @@ function Upload() {
         setFoods(newFoods);
     };
     const [modalOpen, setModalOpen] = useState(false);
+
     const [modalDeleteOpen, setModalDeleteOpen] = useState(false);
+
     return (
         // < div className={`${modalOpen ? classes['wrapper-opacity'] : classes.wrapper}`}>
         <div className={classes.wrapper}>
 
             {modalOpen && <Modal setOpenModal={setModalOpen} handleAddFormChange={handleAddFormChange} handleAddFormSubmit={handleAddFormSubmit} />}
-
+            {/* {modalDeleteOpen && <Modal_Delete setOpenModal={setModalDeleteOpen} handleDeleteClick={handleDeleteClick} />} */}
             <div className={classes.title}>
                 <p className={classes['title-name']}>PRODUCT MANAGEMENT</p>
                 <img src={images.logoImage} alt="logo" className={classes['title-logo']} />
@@ -196,6 +198,7 @@ function Upload() {
                                             food={food}
                                             handleEditClick={handleEditClick}
                                             handleDeleteClick={handleDeleteClick}
+                                            setOpenModal={setModalDeleteOpen}
                                         />
                                     )}
                                 </Fragment>
