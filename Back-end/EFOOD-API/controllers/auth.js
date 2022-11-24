@@ -2,21 +2,6 @@ const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnauthenticatedError, NotFoundError } = require('../errors')
 
-const getAllUsers = async (req, res) => {
-    const users = await User.find({})
-    res.status(StatusCodes.OK).json({ users, count: users.length });
-}
-const getUser = async (req, res) => {
-    const { params: { id: userId } } = req; // req.user.userId, req.params.id
-
-    const user = await User.findOne({
-        _id: userId,
-    })
-    if (!user) {
-        throw new NotFoundError(`No user with id ${userId}`)
-    }
-    res.status(StatusCodes.OK).json({ user })
-}
 const register = async (req, res) => {
 
     // if (!name || !email || !password) {
@@ -24,7 +9,7 @@ const register = async (req, res) => {
     // }
     const user = await User.create({ ...req.body });
     const token = user.createJWT();
-    console.log(user);
+    // console.log(user);
     res.status(StatusCodes.CREATED).json({
         user: { userId: user._id, name: user.name, gender: user.gender, typeOf: user.typeOf },
         token
@@ -51,57 +36,12 @@ const login = async (req, res) => {
     }
     const token = user.createJWT();
     res.status(StatusCodes.OK).json({
-        user: { name: user.name, msg: "Login successfully" },
+        user: { name: user.name, typeOf: user.typeOf, msg: "Login successfully" },
         token
     });
 
 }
-
-const deleteUser = async (req, res) => {
-    const {
-        params: { id: userId },
-    } = req;
-
-    const user = await User.findByIdAndRemove({
-        _id: userId,
-    })
-
-    if (!user) {
-        throw new NotFoundError(`No user with id ${userId}`)
-    }
-    res.status(StatusCodes.OK).json({ msg: `Delete user ID: ${userId} successfully ` })
-
-}
-
-const updateUser = async (req, res) => {
-    const {
-        body: { typeOf },
-        params: { id: userId },
-    } = req;
-
-    if (typeOf === '') {
-        throw new BadRequestError('status fields cannot be empty');
-    }
-    const user = await User.findByIdAndUpdate(
-        {
-            _id: userId,
-            typeOf: typeOf,
-        },
-        req.body,
-        { new: true, runValidators: true }
-    )
-
-    if (!user) {
-        throw new NotFoundError(`No user with id ${userId}`)
-    }
-    res.status(StatusCodes.OK).json({ user })
-}
-
 module.exports = {
-    getUser,
-    getAllUsers,
-    deleteUser,
-    updateUser,
     register,
     login,
 }

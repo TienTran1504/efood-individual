@@ -16,7 +16,8 @@ const connectDB = require('./db/connect')
 const authenticateUser = require('./middleware/authentication')
 //routers
 
-const authRouter = require('./routes/auth');
+const authRouter = require('./routes/auth');// use for both admin, customer
+const adminRouter = require('./routes/admin');// use for admin
 const foodsRouter = require('./routes/foods');
 const billsRouter = require('./routes/bills');
 
@@ -39,6 +40,7 @@ app.use(cors());
 app.use(xss());
 // routes
 app.use('/api/v1/auth', authRouter);
+app.use('/api/v1/admin', authenticateUser, adminRouter);
 app.use('/api/v1/foods', authenticateUser, foodsRouter);
 app.use('/api/v1/bills', authenticateUser, billsRouter);
 

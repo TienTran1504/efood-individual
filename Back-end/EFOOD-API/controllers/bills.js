@@ -6,7 +6,7 @@ const getAllBills = async (req, res) => {
     const bills = await Bill.find({}).sort('createdAt')
     res.status(StatusCodes.OK).json({ bills, count: bills.length });
 }
-
+//get bill by bill id
 const getBill = async (req, res) => {
     const { params: { id: billId } } = req; // req.user.userId, req.params.id
 
@@ -17,6 +17,11 @@ const getBill = async (req, res) => {
         throw new NotFoundError(`No bill with id ${billId}`)
     }
     res.status(StatusCodes.OK).json({ bill })
+}
+//get bills by userId
+const getBillbyUserId = async (req, res) => {
+    const bills = await Bill.find({ createdBy: req.params.id }).sort('createdAt')
+    res.status(StatusCodes.OK).json({ bills, count: bills.length });
 }
 
 const createBill = async (req, res) => {
@@ -76,4 +81,5 @@ module.exports = {
     createBill,
     updateBill,
     deleteBill,
+    getBillbyUserId,
 }
