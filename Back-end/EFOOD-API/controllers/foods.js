@@ -1,6 +1,7 @@
 const Food = require('../models/Food')
+const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
-const { BadRequestError, NotFoundError } = require('../errors')
+const { BadRequestError, NotFoundError, UnauthenticatedError } = require('../errors')
 //get all jobs of user by userid
 const getAllFoods = async (req, res) => {
     const { search, limit } = req.query;
@@ -33,27 +34,73 @@ const getFood = async (req, res) => {
 }
 
 const createFood = async (req, res) => {
-    req.body.createdBy = req.user.userId;
-    const food = await Food.create(req.body);
-    res.status(StatusCodes.CREATED).json({
-        food
-    })
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        req.body.createdBy = req.user.userId;
+        const food = await Food.create(req.body);
+        res.status(StatusCodes.CREATED).json({
+            food
+        })
+    }
+    else {
+        throw new UnauthenticatedError(`User have no permission`)
+    }
 }
 
 const updateFood = async (req, res) => {
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        const {
+            body: { name, price },
+            user: { userId },
+            params: { id: foodId },
+        } = req;
+
+        if (name === '' || price === '') {
+            throw new BadRequestError('Name or price fields cannot be empty');
+        }
+        const food = await Food.findByIdAndUpdate(
+            {
+                _id: foodId,
+                price: price,
+                createdBy: userId
+            },
+            req.body,
+            { new: true, runValidators: true }
+        )
+
+        if (!food) {
+            throw new NotFoundError(`No food with id ${foodId}`)
+        }
+        res.status(StatusCodes.OK).json({ food })
+    }
+    else {
+        throw new UnauthenticatedError(`User have no permission`)
+    }
+}
+const ratingFood = async (req, res) => {
     const {
-        body: { name, price },
+        body: { rating },
         user: { userId },
         params: { id: foodId },
     } = req;
 
-    if (name === '' || price === '') {
-        throw new BadRequestError('Name or price fields cannot be empty');
+    if (rating === '' || rating < 1 || rating > 5) {
+        throw new BadRequestError('Rating fields can not be empty or invalid');
     }
+    const foodCheck = await Food.findOne(
+        {
+            _id: foodId
+        }
+    )
+    foodCheck.ratingList.push(rating);
+    req.body.ratingList = foodCheck.ratingList;
+    let avg = (req.body.ratingList.reduce((total, currentValue) => { return total + currentValue }, 0)) / foodCheck.ratingList.length;
+    req.body.rating = avg;
     const food = await Food.findByIdAndUpdate(
         {
             _id: foodId,
-            price: price,
+            rating: rating,
             createdBy: userId
         },
         req.body,
@@ -67,21 +114,26 @@ const updateFood = async (req, res) => {
 }
 
 const deleteFood = async (req, res) => {
-    const {
-        user: { userId },
-        params: { id: foodId },
-    } = req;
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        const {
+            user: { userId },
+            params: { id: foodId },
+        } = req;
 
-    const food = await Food.findByIdAndRemove({
-        _id: foodId,
-        createdBy: userId,
-    })
+        const food = await Food.findByIdAndRemove({
+            _id: foodId,
+            createdBy: userId,
+        })
 
-    if (!food) {
-        throw new NotFoundError(`No food with id ${foodId}`)
+        if (!food) {
+            throw new NotFoundError(`No food with id ${foodId}`)
+        }
+        res.status(StatusCodes.OK).json({ msg: `Delete food ID: ${foodId} successfully ` })
     }
-    res.status(StatusCodes.OK).json({ msg: `Delete food ID: ${foodId} successfully ` })
-
+    else {
+        throw new UnauthenticatedError(`User have no permission`)
+    }
 }
 module.exports = {
     getAllFoods,
@@ -89,4 +141,5 @@ module.exports = {
     createFood,
     updateFood,
     deleteFood,
+    ratingFood,
 }

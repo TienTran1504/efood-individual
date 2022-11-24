@@ -39,6 +39,11 @@ const UserSchema = new mongoose.Schema({
         type: String,
         enum: ['customer', 'admin'],
         default: 'customer',
+    },
+    bonus: {
+        type: Number,
+        min: [0, "Bonus point can not be a negative number"],
+        default: 0,
     }
 
 })

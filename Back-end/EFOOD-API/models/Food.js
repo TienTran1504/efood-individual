@@ -9,14 +9,25 @@ const FoodSchema = new mongoose.Schema({
         trim: true,
         unique: true
     },
-    // image:{
-    //     type: String,
-
-    // },
+    image: {
+        type: String,
+        default: "./default.png",
+    },
     typeOf: {
         type: String,
         required: [true, 'Please provide type of food'],
         enum: ['món nước', 'cơm', 'đồ uống', 'tráng miệng', 'ăn vặt'],
+    },
+    ratingList: {
+        type: Array,
+        default: [],
+    },
+    rating: {
+        type: Number,
+        default: 4.5,
+        min: [1, 'Rating must be above 1.0'],
+        max: [5, 'Rating must be below 5.0'],
+        set: val => Math.round(val * 10) / 10,
     },
     price: {
         type: Number,
