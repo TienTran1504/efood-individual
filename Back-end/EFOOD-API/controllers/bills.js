@@ -1,26 +1,52 @@
 const Bill = require('../models/Bill')
+const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
-const { BadRequestError, NotFoundError } = require('../errors')
-//get all jobs of user by userid
+const { BadRequestError, NotFoundError, UnauthenticatedError } = require('../errors')
+//get all jobs of user by userid (for admin)
 const getAllBills = async (req, res) => {
-    const bills = await Bill.find({}).sort('createdAt')
-    res.status(StatusCodes.OK).json({ bills, count: bills.length });
-}
-//get bill by bill id
-const getBill = async (req, res) => {
-    const { params: { id: billId } } = req; // req.user.userId, req.params.id
-
-    const bill = await Bill.findOne({
-        _id: billId,
-    })
-    if (!bill) {
-        throw new NotFoundError(`No bill with id ${billId}`)
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        const bills = await Bill.find({}).sort('createdAt')
+        res.status(StatusCodes.OK).json({ bills, count: bills.length });
     }
-    res.status(StatusCodes.OK).json({ bill })
+    else {
+        // throw new UnauthenticatedError(`User ${userCheck._id} have no permission`)
+        throw new UnauthenticatedError(`User have no permission`)
+    }
 }
-//get bills by userId
+//get bills by userId (for admin)
 const getBillbyUserId = async (req, res) => {
-    const bills = await Bill.find({ createdBy: req.params.id }).sort('createdAt')
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        const bills = await Bill.find({ createdBy: req.params.id }).sort('createdAt')
+        res.status(StatusCodes.OK).json({ bills, count: bills.length });
+    }
+    else {
+        throw new UnauthenticatedError(`User have no permission`)
+    }
+}
+//get bill by bill id (admin)
+const getBill = async (req, res) => {
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        const { params: { id: billId } } = req; // req.user.userId, req.params.id
+
+        const bill = await Bill.findOne({
+            _id: billId,
+        })
+        if (!bill) {
+            throw new NotFoundError(`No bill with id ${billId}`)
+        }
+        res.status(StatusCodes.OK).json({ bill })
+    }
+    else {
+        throw new UnauthenticatedError(`User have no permission`)
+
+    }
+}
+// get bills of user (customer or admin)
+const getUserBills = async (req, res) => {
+    const bills = await Bill.find({ createdBy: req.user.userId }).sort('createdAt')
     res.status(StatusCodes.OK).json({ bills, count: bills.length });
 }
 
@@ -33,53 +59,67 @@ const createBill = async (req, res) => {
 }
 
 const updateBill = async (req, res) => {
-    const {
-        body: { status },
-        user: { userId },
-        params: { id: billId },
-    } = req;
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        const {
+            body: { status },
+            user: { userId },
+            params: { id: billId },
+        } = req;
 
-    if (status === '') {
-        throw new BadRequestError('status fields cannot be empty');
-    }
-    const bill = await Bill.findByIdAndUpdate(
-        {
-            _id: billId,
-            status: status,
-            createdBy: userId
-        },
-        req.body,
-        { new: true, runValidators: true }
-    )
+        if (status === '') {
+            throw new BadRequestError('status fields cannot be empty');
+        }
+        const bill = await Bill.findByIdAndUpdate(
+            {
+                _id: billId,
+                status: status,
+                createdBy: userId
+            },
+            req.body,
+            { new: true, runValidators: true }
+        )
 
-    if (!bill) {
-        throw new NotFoundError(`No bill with id ${billId}`)
+        if (!bill) {
+            throw new NotFoundError(`No bill with id ${billId}`)
+        }
+        res.status(StatusCodes.OK).json({ bill })
     }
-    res.status(StatusCodes.OK).json({ bill })
+    else {
+        throw new UnauthenticatedError(`User have no permission`)
+
+    }
 }
 
 const deleteBill = async (req, res) => {
-    const {
-        user: { userId },
-        params: { id: billId },
-    } = req;
+    const userCheck = await User.findOne({ _id: req.user.userId });
+    if (userCheck.typeOf === 'admin') {
+        const {
+            user: { userId },
+            params: { id: billId },
+        } = req;
 
-    const bill = await Bill.findByIdAndRemove({
-        _id: billId,
-        createdBy: userId,
-    })
+        const bill = await Bill.findByIdAndRemove({
+            _id: billId,
+            createdBy: userId,
+        })
 
-    if (!bill) {
-        throw new NotFoundError(`No bill with id ${billId}`)
+        if (!bill) {
+            throw new NotFoundError(`No bill with id ${billId}`)
+        }
+        res.status(StatusCodes.OK).json({ msg: `Delete bill ID: ${billId} successfully ` })
     }
-    res.status(StatusCodes.OK).json({ msg: `Delete bill ID: ${billId} successfully ` })
+    else {
+        throw new UnauthenticatedError(`User have no permission`)
 
+    }
 }
 module.exports = {
     getAllBills,
     getBill,
+    getUserBills,
+    getBillbyUserId,
     createBill,
     updateBill,
     deleteBill,
-    getBillbyUserId,
 }

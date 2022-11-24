@@ -5,8 +5,21 @@ const { BadRequestError, UnauthenticatedError, NotFoundError } = require('../err
 const getAllUsers = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId }); // lấy ra đúng user đang login
     if (userCheck.typeOf === 'admin') {
+        const { search, limit } = req.query;
         const users = await User.find({})
-        res.status(StatusCodes.OK).json({ users, count: users.length });
+        let sortedUsers = [...users];
+        if (search) {
+            sortedUsers = sortedUsers.filter((user) => {
+                return user.name.startsWith(search);
+            })
+        }
+        if (limit) {
+            sortedUsers = sortedUsers.slice(0, Number(limit));
+        }
+        if (sortedUsers.length < 1) {
+            return res.status(StatusCodes.OK).json({ msg: "No users match your search" });
+        }
+        res.status(StatusCodes.OK).json({ sortedUsers, count: sortedUsers.length });
     }
     else {
         // throw new UnauthenticatedError(`User ${userCheck._id} have no permission`)

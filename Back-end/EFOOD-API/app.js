@@ -21,6 +21,11 @@ const adminRouter = require('./routes/admin');// use for admin
 const foodsRouter = require('./routes/foods');
 const billsRouter = require('./routes/bills');
 
+//parse form data
+app.use(express.urlencoded({ extended: false }));
+//parse json
+app.use(express.json());
+
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found');

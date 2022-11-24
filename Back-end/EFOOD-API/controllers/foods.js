@@ -3,8 +3,21 @@ const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 //get all jobs of user by userid
 const getAllFoods = async (req, res) => {
+    const { search, limit } = req.query;
     const foods = await Food.find({}).sort('createdAt')
-    res.status(StatusCodes.OK).json({ foods, count: foods.length });
+    let sortedFoods = [...foods];
+    if (search) {
+        sortedFoods = sortedFoods.filter((food) => {
+            return food.name.startsWith(search);
+        })
+    }
+    if (limit) {
+        sortedFoods = sortedFoods.slice(0, Number(limit));
+    }
+    if (sortedFoods.length < 1) {
+        return res.status(StatusCodes.OK).json({ msg: "No foods match your search" });
+    }
+    res.status(StatusCodes.OK).json({ sortedFoods, count: sortedFoods.length });
 }
 
 const getFood = async (req, res) => {
