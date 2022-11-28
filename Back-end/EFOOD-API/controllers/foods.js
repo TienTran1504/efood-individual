@@ -3,6 +3,7 @@ const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError, UnauthenticatedError } = require('../errors')
 //get all jobs of user by userid
+// {{URL}}/foods
 const getAllFoods = async (req, res) => {
     const { search, limit } = req.query;
     const foods = await Food.find({}).sort('createdAt')
@@ -20,7 +21,7 @@ const getAllFoods = async (req, res) => {
     }
     res.status(StatusCodes.OK).json({ sortedFoods, count: sortedFoods.length });
 }
-
+// {{URL}}/foods/:id
 const getFood = async (req, res) => {
     const { params: { id: foodId } } = req; // req.user.userId, req.params.id
 
@@ -32,7 +33,7 @@ const getFood = async (req, res) => {
     }
     res.status(StatusCodes.OK).json({ food })
 }
-
+// {{URL}}/foods
 const createFood = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId });
     if (userCheck.typeOf === 'admin') {
@@ -46,23 +47,18 @@ const createFood = async (req, res) => {
         throw new UnauthenticatedError(`User have no permission`)
     }
 }
-
+// {{URL}}/foods/:id
 const updateFood = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId });
     if (userCheck.typeOf === 'admin') {
         const {
-            body: { name, price },
             user: { userId },
             params: { id: foodId },
         } = req;
 
-        if (name === '' || price === '') {
-            throw new BadRequestError('Name or price fields cannot be empty');
-        }
         const food = await Food.findByIdAndUpdate(
             {
                 _id: foodId,
-                price: price,
                 createdBy: userId
             },
             req.body,
@@ -78,6 +74,7 @@ const updateFood = async (req, res) => {
         throw new UnauthenticatedError(`User have no permission`)
     }
 }
+// {{URL}}/foods/rating/:id
 const ratingFood = async (req, res) => {
     const {
         body: { rating },
@@ -112,7 +109,7 @@ const ratingFood = async (req, res) => {
     }
     res.status(StatusCodes.OK).json({ food })
 }
-
+// {{URL}}/foods/:id
 const deleteFood = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId });
     if (userCheck.typeOf === 'admin') {

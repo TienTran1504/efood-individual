@@ -2,6 +2,7 @@ const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnauthenticatedError, NotFoundError } = require('../errors')
 
+// {{URL}}/auth/register
 const register = async (req, res) => {
 
     // if (!name || !email || !password) {
@@ -15,7 +16,7 @@ const register = async (req, res) => {
         token
     });
 }
-
+// {{URL}}/auth/login
 const login = async (req, res) => {
     const { email, password } = req.body;
     //check email, password insert

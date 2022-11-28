@@ -2,6 +2,7 @@ const User = require('../models/User')
 const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, UnauthenticatedError, NotFoundError } = require('../errors')
 
+//{{URL}}/admin
 const getAllUsers = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId }); // lấy ra đúng user đang login
     if (userCheck.typeOf === 'admin') {
@@ -26,6 +27,7 @@ const getAllUsers = async (req, res) => {
         throw new UnauthenticatedError(`User have no permission`)
     }
 }
+// {{URL}}/admin/:id
 const getUser = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId });
     if (userCheck.typeOf === 'admin') {
@@ -43,7 +45,7 @@ const getUser = async (req, res) => {
         throw new UnauthenticatedError(`User have no permission`)
     }
 }
-
+// {{URL}}/admin/:id
 const deleteUser = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId });
     if (userCheck.typeOf === 'admin') {
@@ -65,7 +67,7 @@ const deleteUser = async (req, res) => {
     }
 
 }
-
+// {{URL}}/admin/:id
 const updateUser = async (req, res) => {
     const userCheck = await User.findOne({ _id: req.user.userId });
     if (userCheck.typeOf === 'admin') {
